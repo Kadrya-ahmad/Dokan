@@ -1,13 +1,13 @@
 {
   "name": "دكانك - نظام إدارة الدكاكين",
   "short_name": "دكانك",
-  "description": "نظام متكامل لإدارة الدكاكين والمبيعات والمخزون",
-  "start_url": "/index.html",
+  "description": "نظام متكامل لإدارة المبيعات والمخزون",
+  "start_url": "/Dokan/index.html",
+  "scope": "/Dokan/",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#667eea",
   "orientation": "portrait",
-  "scope": "/",
   "icons": [
     {
       "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23667eea'/%3E%3Ctext x='50%25' y='50%25' font-size='120' text-anchor='middle' dy='.3em' fill='white' font-family='Arial'%3E🏪%3C/text%3E%3C/svg%3E",
@@ -21,10 +21,5 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ],
-  "screenshots": [],
-  "prefer_related_applications": false,
-  "categories": ["business", "shopping", "productivity"],
-  "lang": "ar",
-  "dir": "rtl"
+  ]
 }
