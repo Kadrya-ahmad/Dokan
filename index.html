@@ -11,10 +11,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="دكانك">
-    <!-- تم إصلاح المسار إلى مسار نسبي -->
-    <link rel="manifest" href="manifest.json">
+    <!-- المسار مضبوط للمستودع Dokan -->
+    <link rel="manifest" href="/Dokan/manifest.json">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23667eea'/%3E%3Ctext x='50%25' y='50%25' font-size='120' text-anchor='middle' dy='.3em' fill='white' font-family='Arial'%3E🏪%3C/text%3E%3C/svg%3E">
-    
+   
     <!-- Bootstrap RTL -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -1477,7 +1477,7 @@
                 <option value="accountant">محاسب</option>
             </select>
             <!-- تم تغيير type إلى password لإخفاء كلمة المرور -->
-            <input type="password" id="loginPass" class="form-control mb-3 text-center" placeholder="كلمة المرور" style="border-radius:50px; padding:15px;" value="1234">
+            <input type="password" id="loginPass" class="form-control mb-3 text-center" placeholder="كلمة المرور" style="border-radius:50px; padding:15px;">
             <button onclick="window.doLogin()" class="btn-modern w-100 btn-icon" style="font-size:1.2rem;">
                 <i class="fas fa-sign-in-alt"></i> دخول
             </button>
@@ -1898,50 +1898,62 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Register Service Worker (باستخدام مسار نسبي) -->
+<!-- Register Service Worker -->
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            // تم إصلاح المسار إلى مسار نسبي
-            navigator.serviceWorker.register('service-worker.js')
+            // المسار مضبوط للمستودع Dokan
+            navigator.serviceWorker.register('/Dokan/sw.js', { scope: '/Dokan/' })
                 .then(registration => {
                     console.log('ServiceWorker registered: ', registration);
                 })
                 .catch(error => {
                     console.log('ServiceWorker registration failed: ', error);
-                    // عرض رسالة للمستخدم ولكن لا نوقف التطبيق
-                    console.warn('PWA features may not work. Please ensure service-worker.js exists in the root directory.');
                 });
         });
     }
 </script>
 
-<!-- Install Prompt Handler -->
+<!-- Install Prompt Handler - معدل عشان يظهر مرة واحدة -->
 <script>
     let deferredPrompt;
     const installButton = document.getElementById('installButton');
 
+    // شوف إذا المستخدم شاف الزر قبل كدا ولا لأ
+    const hasSeenInstallPrompt = localStorage.getItem('hasSeenInstallPrompt');
+
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        installButton.style.display = 'flex';
+        
+        // لو المستخدم ما شاف الزر قبل كدا، ظهره
+        if (!hasSeenInstallPrompt) {
+            installButton.style.display = 'flex';
+        }
     });
 
     installButton.addEventListener('click', async () => {
         if (!deferredPrompt) {
             return;
         }
+        
+        // خفي الزر أول ما يضغط عليه
+        installButton.style.display = 'none';
+        
+        // سجل إنه شاف الزر
+        localStorage.setItem('hasSeenInstallPrompt', 'true');
+        
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         console.log(`User response to the install prompt: ${outcome}`);
         deferredPrompt = null;
-        installButton.style.display = 'none';
     });
 
     window.addEventListener('appinstalled', (evt) => {
         console.log('App was installed.');
         installButton.style.display = 'none';
         deferredPrompt = null;
+        localStorage.setItem('hasSeenInstallPrompt', 'true');
     });
 </script>
 
@@ -2098,8 +2110,8 @@
             },
             // المستخدمون (مدير ومحاسب فقط)
             users: [
-                { role: 'admin', pass: '1234', name: 'مدير المتجر' },
-                { role: 'accountant', pass: '1234', name: 'محاسب' }
+                { role: 'admin', pass: '0125', name: 'مدير المتجر' },
+                { role: 'accountant', pass: '0125', name: 'محاسب' }
             ],
             currentUser: null,
             
